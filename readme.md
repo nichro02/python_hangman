@@ -9,4 +9,3 @@ A console hangman game where the user guesses letters until they spell the word 
     - The game is over if the user guesses all of the letters in the word
     - The user is informed if they guess a letter incorrectly
     - The user loses the game if they have no remaining guesses and there are blank spaces on the board
-    
