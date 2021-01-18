@@ -26,7 +26,7 @@ class Game():
         self.word = ''
         self.word_info = []
         self.guess = ''
-        self.current_word = ' _ '*len(self.word)
+        self.guessed_letters = set()
         self.guessed_letter_count = 0
     #get word to be guessed
     def get_random_word(self):
@@ -34,10 +34,14 @@ class Game():
         get_word = Word(random.choice(self.word_bank).upper())
         #store word_info dictionary to use to evaluate guesses
         self.word_info = get_word.chosen_word_info
-        print('WORD INFO DICTIONARY: ',get_word.chosen_word_info)
+        
+        #print('WORD INFO DICTIONARY: ',get_word.chosen_word_info)
+        
         #store the string
         self.word = get_word.chosen_word
-        print('THE WORD IS...',self.word)
+        
+        #print('THE WORD IS...',self.word)
+        
         #start game
         self.game_flow_logic()
         #return self.word.chosen_word
@@ -53,7 +57,7 @@ class Game():
         self.guess = input(' Please guess a letter ').upper()
         print(self.guess)
         self.rounds -= 1
-        print(self.rounds)
+        print('ROUNDS REMAINING',self.rounds)
         self.print_word()
 
     #show word at beginning of round
@@ -64,6 +68,8 @@ class Game():
                 print(item['letter'], end='')
             else:
                 print(' _ ',end='')
+
+        print(' GUESSED LETTERS: ', self.guessed_letters)
 
     #print updated word after guess has been evaluated
     def print_word(self):
@@ -77,6 +83,7 @@ class Game():
             elif item['guessed'] == True:
                 print(item['letter'], end='')
             else:
+                self.guessed_letters.add(self.guess)
                 print(' _ ',end='')
         print(' # OF GUESSED LETTERS:', self.guessed_letter_count)
         #evaluate win scenario
@@ -89,7 +96,7 @@ class Game():
         elif self.rounds > 0:
             self.game_flow_logic()
         else:
-            print('You lost the game')
+            print('You lost the game. The word was', self.word)
 
 
 #instantiate game object    
