@@ -6,6 +6,10 @@ class Word():
     def __init__(self, chosen_word):
         self.chosen_word = chosen_word
         self.chosen_word_info = []
+        #list interpolation below
+        #self.chosen_word_info = [{'letter': letter, 'guessed':False} for letter in chosen_word]
+
+        #equivalent code to list interpolation
         for letter in chosen_word:
             #create dictionary to hold letters of chosen word and a status to indicate whether word has been guessed
             chosen_word_dictionary = {}
@@ -43,7 +47,8 @@ class Game():
         #print('THE WORD IS...',self.word)
         
         #start game
-        self.game_flow_logic()
+        #self.game_flow_logic()
+        self.greeting()
         #return self.word.chosen_word
     
     #game flow:
@@ -53,12 +58,24 @@ class Game():
     #evaluate if winning criteria is met
     #decrement round by 1
     def game_flow_logic(self):
+        #if self.rounds == 8:
+            #self.greeting()
+        print('ROUNDS REMAINING',self.rounds)
         self.word_at_start_of_round()
         self.guess = input(' Please guess a letter ').upper()
         print(self.guess)
-        self.rounds -= 1
-        print('ROUNDS REMAINING',self.rounds)
+        #self.rounds -= 1
         self.print_word()
+
+    #print greeting and ask if user is ready to play
+    def greeting(self):
+        print('Welcome to Hangman. Press y to play and n to exit ')
+        start_game=input()
+        if start_game == 'y':
+            #self.word_at_start_of_round()
+            self.game_flow_logic()
+        else:
+            print('bye!')
 
     #show word at beginning of round
     #populate any letters that have already been guessed
@@ -69,13 +86,16 @@ class Game():
             else:
                 print(' _ ',end='')
 
-        print(' GUESSED LETTERS: ', self.guessed_letters)
+        print(' LETTERS GUESSED : ', self.guessed_letters)
 
     #print updated word after guess has been evaluated
     def print_word(self):
+        self.quit_scenario()
+        self.give_feedback()
         for item in self.word_info:
             #print(item)
             if self.guess == item['letter']:
+                #print(f'Correct! {self.guess} is in the word',end='')
                 print(item['letter'], end='')
                 item['guessed'] = True
                 self.guessed_letter_count += 1
@@ -84,6 +104,7 @@ class Game():
                 print(item['letter'], end='')
             else:
                 self.guessed_letters.add(self.guess)
+                #print(f'Too bad! {self.guess} is not in the word')
                 print(' _ ',end='')
         print(' # OF GUESSED LETTERS:', self.guessed_letter_count)
         #evaluate win scenario
@@ -98,6 +119,23 @@ class Game():
         else:
             print('You lost the game. The word was', self.word)
 
+    #quit game logic: handle user quitting game
+    def quit_scenario(self):
+        #end gameflow logic
+        if(self.guess == ';'):
+            print('see you later!')
+            #terminate program
+            raise SystemExit
+
+    #tell user if they have guessed correctly or incorrectly
+    #subtract a round if incorrect letter is guessed
+    def give_feedback(self):
+        if(self.guess in self.word):
+            print('Nice guess')
+            
+        else:
+            print('Nope nope nope')
+            self.rounds -= 1
 
 #instantiate game object    
 game = Game()
